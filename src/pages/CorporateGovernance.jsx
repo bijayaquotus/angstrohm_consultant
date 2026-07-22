@@ -2,11 +2,11 @@ import React from 'react';
 import { BrainCircuit, Cpu, Bot, Monitor, Sparkles } from 'lucide-react';
 
 
-import PageHero from '../components/section/services/corporategovernance/PageHero';
-import IntroSplit from '../components/section/services/corporategovernance/IntroSplit';
-import IconFeatureGrid from '../components/section/services/corporategovernance/IconFeatureGrid';
-import CalloutBox from '../components/section/services/corporategovernance/CalloutBox';
-import CtaBanner from '../components/section/services/corporategovernance/CtaBanner';
+import PageHero from '../components/section/services/corporategovernance/Pagehero';
+import IntroSplit from '../components/section/services/corporategovernance/Introsplit';
+import IconFeatureGrid from '../components/section/services/corporategovernance/Iconfeaturegrid';
+import CalloutBox from '../components/section/services/corporategovernance/Calloutbox';
+import CtaBanner from '../components/section/services/corporategovernance/Ctabanner';
 
 const governancePlan = [
   {

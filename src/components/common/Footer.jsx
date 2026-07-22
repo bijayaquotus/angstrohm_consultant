@@ -96,7 +96,7 @@ return (
             <img 
               src="/20170629-Angstrohm-Consulting-Logo-300x102.png" 
               alt="Angstrohm Consulting" 
-              className="w-44 h-auto brightness-110 contrast-125" 
+              className="w-44 h-auto brightness-150 contrast-125" 
             />
           </Link>
         </div>
@@ -121,7 +121,7 @@ return (
         </div>
 
         {/* Corporate Information Column */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <h5 className="text-[#b92c48] font-bold tracking-[0.15em] text-xs uppercase m-0">
             CORPORATE INFORMATION
           </h5>
@@ -140,7 +140,7 @@ return (
         </div>
 
         {/* Subscribe Column */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <h5 className="text-white font-bold tracking-[0.15em] text-xs uppercase m-0">
             Get Sh*t Done!
           </h5>

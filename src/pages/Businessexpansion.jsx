@@ -2,11 +2,11 @@ import React from 'react';
 import { BrainCircuit, Cpu, Bot, Monitor, Sparkles } from 'lucide-react';
 
 
-import PageHero from '../components/section/services/businessexpansionservices/PageHero';
-import IntroSplit from '../components/section/services/businessexpansionservices/IntroSplit';
-import IconFeatureGrid from '../components/section/services/businessexpansionservices/IconFeatureGrid';
-import CalloutBox from '../components/section/services/businessexpansionservices/CalloutBox';
-import CtaBanner from '../components/section/services/businessexpansionservices/CtaBanner';
+import PageHero from '../components/section/services/businessexpansionservices/Pagehero';
+import IntroSplit from '../components/section/services/businessexpansionservices/Introsplit';
+import IconFeatureGrid from '../components/section/services/businessexpansionservices/Iconfeaturegrid';
+import CalloutBox from '../components/section/services/businessexpansionservices/Calloutbox';
+import CtaBanner from '../components/section/services/businessexpansionservices/Ctabanner';
 
 const expansionPlaybook = [
   {

@@ -2,12 +2,12 @@ import React from 'react';
 import { Bot, BrainCircuit, Cpu, Monitor, Sparkles} from 'lucide-react';
 
 
-import PageHero from '../components/section/services/ultimateperformancesolutions/PageHero';
-import IntroSplit from '../components/section/services/ultimateperformancesolutions/IntroSplit';
-import IconFeatureGrid from '../components/section/services/ultimateperformancesolutions/IconFeatureGrid';
-import TeamSpotlight from '../components/section/services/ultimateperformancesolutions/TeamSpotlight';
-import CalloutBox from '../components/section/services/ultimateperformancesolutions/CalloutBox';
-import CtaBanner from '../components/section/services/ultimateperformancesolutions/CtaBanner';
+import PageHero from '../components/section/services/ultimateperformancesolutions/Pagehero';
+import IntroSplit from '../components/section/services/ultimateperformancesolutions/Introsplit';
+import IconFeatureGrid from '../components/section/services/ultimateperformancesolutions/Iconfeaturegrid';
+import TeamSpotlight from '../components/section/services/ultimateperformancesolutions/Teamspotlight';
+import CalloutBox from '../components/section/services/ultimateperformancesolutions/Calloutbox';
+import CtaBanner from '../components/section/services/ultimateperformancesolutions/Ctabanner';
 
 const silverBullets = [
   {

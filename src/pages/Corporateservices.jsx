@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrainCircuit, Cpu, Bot, Monitor, Sparkles } from 'lucide-react';
 
-import PageHero from '../components/section/services/corporateservices/PageHero';
-import IntroSplit from '../components/section/services/corporateservices/IntroSplit';
-import IconFeatureGrid from '../components/section/services/corporateservices/IconFeatureGrid';
-import CalloutBox from '../components/section/services/corporateservices/CalloutBox';
-import CtaBanner from '../components/section/services/corporateservices/CtaBanner';
+import PageHero from '../components/section/services/corporateservices/Pagehero';
+import IntroSplit from '../components/section/services/corporateservices/Introsplit';
+import IconFeatureGrid from '../components/section/services/corporateservices/Iconfeaturegrid';
+import CalloutBox from '../components/section/services/corporateservices/Calloutbox';
+import CtaBanner from '../components/section/services/corporateservices/Ctabanner';
 
 const painPlaybook = [
   {

@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
-// Import the core Icon component creator to bypass named export errors
-import * as Icons from 'lucide-react';
+
+// Custom inline SVGs for brand logos to replace missing Lucide icons safely
+const FacebookIcon = (props) => (
+  <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+  </svg>
+);
+
+const LinkedinIcon = (props) => (
+  <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+  </svg>
+);
 
 export default function TeamSpotlight({ title, members = [], tagline, highlight }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -15,10 +26,6 @@ export default function TeamSpotlight({ title, members = [], tagline, highlight 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex <= 0 ? maxIndex : prevIndex - 1));
   };
-
-  // Safely grab icons even if named exports conflict in Vite bundles
-  const FacebookIcon = Icons.Facebook || Icons.facebook;
-  const LinkedinIcon = Icons.Linkedin || Icons.linkedin;
 
   return (
     <section className="bg-[#F4F1EA] py-16 md:py-20 px-6 text-center select-none overflow-hidden">
@@ -76,9 +83,9 @@ export default function TeamSpotlight({ title, members = [], tagline, highlight 
                     {/* Member Details */}
                     <p className="text-[#c8385a] font-bold text-sm mb-2">{member.name}</p>
                     
-                    {/* Dynamic Safe Icon Rendering Layout */}
+                    {/* Social Icon Rendering Layout */}
                     <div className="flex gap-3 text-slate-500 justify-center">
-                      {member.facebook && member.facebook !== '#' && FacebookIcon && (
+                      {member.facebook && member.facebook !== '#' && (
                         <a 
                           href={member.facebook} 
                           target="_blank" 
@@ -89,7 +96,7 @@ export default function TeamSpotlight({ title, members = [], tagline, highlight 
                           <FacebookIcon className="w-4 h-4" />
                         </a>
                       )}
-                      {member.linkedin && member.linkedin !== '#' && LinkedinIcon && (
+                      {member.linkedin && member.linkedin !== '#' && (
                         <a 
                           href={member.linkedin} 
                           target="_blank" 
