@@ -9,8 +9,10 @@ function SubscribeForm({ variant = "dark" }) {
     lastName: "",
     email: ""
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
+    setError(""); // Clear error on typing
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -19,7 +21,19 @@ function SubscribeForm({ variant = "dark" }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    // Prevent submission with whitespace only
+    const firstNameTrimmed = formData.firstName.trim();
+    const lastNameTrimmed = formData.lastName.trim();
+
+    // Name Validation
+    if (!firstNameTrimmed || !lastNameTrimmed) {
+      setError("Please fill out both First and Last Name.");
+      return;
+    }
+
+    setError("");
+    console.log("Form submitted successfully:", formData);
     // Add your subscription logic here
   };
 
@@ -28,41 +42,48 @@ function SubscribeForm({ variant = "dark" }) {
     : "bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500";
 
   return (
-   <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-  <input
-    type="text"
-    name="firstName"
-    placeholder="First Name"
-    value={formData.firstName}
-    onChange={handleChange}
-    className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
-    required
-  />
-  <input
-    type="text"
-    name="lastName"
-    placeholder="Last Name"
-    value={formData.lastName}
-    onChange={handleChange}
-    className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
-    required
-  />
-  <input
-    type="email"
-    name="email"
-    placeholder="Email"
-    value={formData.email}
-    onChange={handleChange}
-    className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
-    required
-  />
-  <button
-    type="submit"
-    className="bg-[#c8264f] text-white font-semibold py-2.5 px-6 rounded-full hover:bg-[#b01e42] transition-colors text-sm uppercase tracking-wider mt-1 cursor-pointer"
-  >
-    Subscribe
-  </button>
-</form>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      {/* Error Message */}
+      {error && (
+        <p className="text-[#c8264f] text-xs font-semibold px-1">
+          {error}
+        </p>
+      )}
+
+      <input
+        type="text"
+        name="firstName"
+        placeholder="First Name *"
+        value={formData.firstName}
+        onChange={handleChange}
+        className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
+        required
+      />
+      <input
+        type="text"
+        name="lastName"
+        placeholder="Last Name *"
+        value={formData.lastName}
+        onChange={handleChange}
+        className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email *"
+        value={formData.email}
+        onChange={handleChange}
+        className={`w-full px-4 py-2.5 rounded-full border bg-[#F4F1EA] text-slate-800 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#c8264f] transition-colors ${inputClass}`}
+        required
+      />
+      <button
+        type="submit"
+        className="bg-[#c8264f] text-white font-semibold py-2.5 px-6 rounded-full hover:bg-[#b01e42] transition-colors text-sm uppercase tracking-wider mt-1 cursor-pointer"
+      >
+        Subscribe
+      </button>
+    </form>
   );
 }
 
@@ -86,7 +107,7 @@ export default function Footer() {
     { name: "Terms of Use", path: "/terms-of-use" },
   ];
 
-return (
+  return (
     <footer id="contact" className="bg-[#0b0c10] pt-8 pb-6 border-t border-white/5">
       <div className="max-w-[1340px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-white/10 pb-12">
         

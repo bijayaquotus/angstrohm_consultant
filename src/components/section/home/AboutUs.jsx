@@ -77,7 +77,7 @@ export default function AboutUs() {
 
         <div className="space-y-3">
           <h4 className="font-display text-[#c8264f] text-xl tracking-wide uppercase">Our Vision</h4>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <p className="text-slate-400 text-[16px] leading-relaxed">
             At Angstrohm, we're on a mission to revolutionize the consulting game and turn it from drab to fab! To become the coolest and most respected consulting firm in all of South East Asia, where we're known for our incredible expertise, infectious energy, and a touch of fabulousness.
           </p>
         </div>

@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ServicesWhatWeDo() {
   // Pulled out the featured item to style its grid/width independently
   const mainService = {
     title: "ULTIMATE PERFORMANCE SOLUTIONS - LEADERSHIP COACHING",
     path: "/ultimateperformance",
-    text: "Get ready to level up your business skills with our Coaching Programmes for Strategic Business Development and Leadership supporting Business Leaders, Professional Managers and motivated individuals. We’re here to make learning fun and help you unleash your inner boss! Whether you’re a seasoned pro looking to up your game or a rising star hungry for success, we’ve got your back. Let’s kickstart your journey to greatness – one coaching session at a time!"
+    text: "Get ready to level up your business skills with our Coaching Programmes for Strategic Business Development and Leadership supporting Business Leaders, Professional Managers and motivated individuals. We're here to make learning fun and help you unleash your inner boss! Whether you're a seasoned pro looking to up your game or a rising star hungry for success, we've got your back. Let's kickstart your journey to greatness – one coaching session at a time!"
   };
 
   const secondaryServices = [
@@ -42,6 +47,13 @@ export default function ServicesWhatWeDo() {
     }
   ];
 
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const mainCardRef = useRef(null);
+  const secondaryCardsRef = useRef([]);
+  const bottomHeadlineRef = useRef(null);
+  const titleRef = useRef(null);
+
   const mainIcon = (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12v6a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h6m4 0h6v6m-6-6l-6 6" />
   );
@@ -54,12 +66,150 @@ export default function ServicesWhatWeDo() {
     <path key="4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />,
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Set initial states
+      gsap.set([headerRef.current, titleRef.current], {
+        opacity: 0,
+        y: 40,
+      });
+
+      gsap.set(mainCardRef.current, {
+        opacity: 0,
+        y: 50,
+        scale: 0.95,
+      });
+
+      gsap.set(secondaryCardsRef.current, {
+        opacity: 0,
+        y: 50,
+        scale: 0.92,
+      });
+
+      gsap.set(bottomHeadlineRef.current, {
+        opacity: 0,
+        y: 30,
+      });
+
+      // Header animation
+      const headerTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+        defaults: {
+          ease: "power3.out",
+          duration: 1,
+        }
+      });
+
+      headerTl
+        .to(headerRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+        })
+        .to(titleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+        }, "-=0.4");
+
+      // Main card animation with 3D tilt effect
+      gsap.to(mainCardRef.current, {
+        scrollTrigger: {
+          trigger: mainCardRef.current,
+          start: "top 85%",
+          end: "top 40%",
+          toggleActions: "play none none reverse",
+          scrub: 1,
+        },
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.5,
+        ease: "power3.out",
+      });
+
+      // Secondary cards stagger animation
+      secondaryCardsRef.current.forEach((card, index) => {
+        gsap.to(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            end: "top 60%",
+            toggleActions: "play none none reverse",
+          },
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          delay: index * 0.12,
+          ease: "back.out(1.7)",
+        });
+      });
+
+      // Bottom headline animation
+      gsap.to(bottomHeadlineRef.current, {
+        scrollTrigger: {
+          trigger: bottomHeadlineRef.current,
+          start: "top 90%",
+          end: "top 70%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+      });
+
+      // Parallax effect on section background
+      gsap.to(sectionRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+        backgroundColor: "#efe8dd",
+        duration: 1,
+        ease: "none",
+      });
+
+      // Floating animation for decorative elements (adds subtle motion)
+      const cards = document.querySelectorAll('.service-card');
+      cards.forEach((card, i) => {
+        gsap.to(card.querySelector('.service-icon'), {
+          y: -5,
+          duration: 2 + i * 0.3,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: i * 0.2,
+        });
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="services" className="relative bg-[#f4f1ea] py-24 px-4 sm:px-6 text-[#01012C]">
+    <section ref={sectionRef} id="services" className="relative bg-[#f4f1ea] py-24 px-4 sm:px-6 text-[#01012C] overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#c8264f]/5 blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-[#c8264f]/5 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#c8264f]/3 blur-3xl" />
+      </div>
+
       <div className="max-w-[1280px] mx-auto relative z-10">
 
         {/* Section header */}
-        <div className="text-center mb-16">
+        <div ref={headerRef} className="text-center mb-16">
           <h3 className="font-display text-4xl md:text-5xl tracking-tight mb-4">
             What We're Awesome At
           </h3>
@@ -67,24 +217,24 @@ export default function ServicesWhatWeDo() {
         </div>
 
         {/* Top Full-Width White Card Container matching the layout width pattern */}
-        <div className="mb-6">
+        <div ref={mainCardRef} className="mb-6">
           <Link
             to={mainService.path}
-            className="group block relative bg-white rounded-2xl border border-slate-100 p-7 text-left shadow-[0_2px_10px_rgba(1,1,44,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_36px_-10px_rgba(1,1,44,0.18)]"
+            className="group block relative bg-white rounded-2xl border border-slate-100 p-7 text-left shadow-[0_2px_10px_rgba(1,1,44,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_36px_-10px_rgba(1,1,44,0.18)] service-card"
           >
             {/* Icon */}
-            <div className="w-12 h-12 rounded-xl bg-[#c8264f]/10 text-[#c8264f] flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-[#c8264f] group-hover:text-white">
+            <div className="service-icon w-12 h-12 rounded-xl bg-[#c8264f]/10 text-[#c8264f] flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-[#c8264f] group-hover:text-white">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mainIcon}
               </svg>
             </div>
 
-            <h4 className="font-display text-sm tracking-wide text-[#01012C] uppercase mb-3 leading-snug group-hover:text-[#c8264f] transition-colors duration-300">
+            <h4 className="font-display text-[17px] tracking-wide text-[#01012C] uppercase mb-3 leading-snug group-hover:text-[#c8264f] transition-colors duration-300">
               {mainService.title}
             </h4>
             
             {/* Width Constraint applied to text wrapper for paragraph layout */}
-            <p className="text-slate-500 text-sm leading-relaxed max-w-[850px]">
+            <p className="text-slate-500 text-[16px] leading-relaxed max-w-[1000px]">
               {mainService.text}
             </p>
 
@@ -98,20 +248,21 @@ export default function ServicesWhatWeDo() {
           {secondaryServices.map((service, index) => (
             <Link
               key={index}
+              ref={el => secondaryCardsRef.current[index] = el}
               to={service.path}
-              className="group relative bg-white rounded-2xl border border-slate-100 p-7 text-left shadow-[0_2px_10px_rgba(1,1,44,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_36px_-10px_rgba(1,1,44,0.18)]"
+              className="group relative bg-white rounded-2xl border border-slate-100 p-7 text-left shadow-[0_2px_10px_rgba(1,1,44,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_36px_-10px_rgba(1,1,44,0.18)] service-card"
             >
               {/* Icon */}
-              <div className="w-12 h-12 rounded-xl bg-[#c8264f]/10 text-[#c8264f] flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-[#c8264f] group-hover:text-white">
+              <div className="service-icon w-12 h-12 rounded-xl bg-[#c8264f]/10 text-[#c8264f] flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-[#c8264f] group-hover:text-white">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {icons[index] ?? icons[0]}
                 </svg>
               </div>
 
-              <h4 className="font-display text-sm tracking-wide text-[#01012C] uppercase mb-3 leading-snug group-hover:text-[#c8264f] transition-colors duration-300">
+              <h4 className="font-display text-[17px] tracking-wide text-[#01012C] uppercase mb-3 leading-snug group-hover:text-[#c8264f] transition-colors duration-300">
                 {service.title}
               </h4>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <p className="text-slate-500 text-[16px] leading-relaxed">
                 {service.text}
               </p>
 
@@ -122,8 +273,8 @@ export default function ServicesWhatWeDo() {
         </div>
 
         {/* Section Bottom Headline */}
-        <div className="text-center">
-          <h2 className="inline-block font-display text-2xl md:text-3xl tracking-wide text-[#c8264f] uppercase">
+        <div ref={bottomHeadlineRef}>
+          <h2 ref={titleRef} className="inline-block font-display text-2xl md:text-3xl tracking-wide text-[#c8264f] uppercase text-center w-full">
             Where do you need our awesomeness?
           </h2>
         </div>

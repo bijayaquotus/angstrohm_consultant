@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom'
 
 export default function ClientsCTA() {
   const sectionRef = useRef(null);
@@ -105,7 +106,7 @@ export default function ClientsCTA() {
 
           {/* Left Side: White Info Box */}
           <div className={`cc-card-left ${inView ? 'in' : ''} bg-white text-slate-600 p-8 md:p-12 lg:col-span-6 z-10`}>
-            <p className="text-sm leading-relaxed">
+            <p className="text-[18px] leading-relaxed">
               Not only do we aim for excellence, but we also deliver results that speak for themselves. Our
               track record of success is reflected in the satisfaction of our esteemed clients, who have
               partnered with us to achieve their goals and reach new heights. From small startups to
@@ -123,9 +124,11 @@ export default function ClientsCTA() {
             <h3 className={`cc-heading ${inView ? 'in' : ''} font-display text-3xl md:text-4xl tracking-tight mb-8 leading-tight max-w-md`}>
               Ready to hop aboard the stress-free train and become one of our delighted customers?
             </h3>
-            <button className={`cc-btn ${inView ? 'in' : ''} bg-[#01012C] hover:bg-[#151347] text-white text-[11px] font-black tracking-widest py-4 px-8 uppercase transition-colors duration-200 rounded-full shadow-lg`}>
-              Yes! Yes! Yes! Please Yes!
-            </button>
+            <Link to="/contact">
+  <button className={`cc-btn ${inView ? 'in' : ''} bg-[#01012C] hover:bg-[#151347] text-white text-[11px] font-black tracking-widest py-4 px-8 uppercase transition-colors duration-200 rounded-full shadow-lg cursor-pointer`}>
+    Yes! Yes! Yes! Please Yes!
+  </button>
+</Link>
           </div>
 
         </div>
