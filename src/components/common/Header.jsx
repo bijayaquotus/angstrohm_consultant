@@ -26,7 +26,7 @@ export default function Header() {
     { label: 'SERVICES', to: '/ultimateperformance', isDropdown: true },
     { label: 'ABOUT US', to: '/about' },
     { label: 'SUPERHEROES', to: '/superheroes' },
-    { label: 'WORKSHOP', to: '/workshop' },
+    // { label: 'WORKSHOP', to: '/workshop' },
     { label: 'CLIENTS', to: '/client' },
     { label: 'CONTACT US', to: '/contact' },
   ];

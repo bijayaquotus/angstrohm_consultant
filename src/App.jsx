@@ -6,7 +6,7 @@ import Home from "./pages/Home.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import ClientsPage from "./pages/ClientsPage.jsx";
 import SuperheroesPage from "./pages/SuperheroesPage.jsx";
-import WorkshopPage from "./pages/WorkshopPage.jsx";
+// import WorkshopPage from "./pages/WorkshopPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import Ultimateperformance from "./pages/Ultimateperformance.jsx";
 import BusinessExpansion from "./pages/Businessexpansion.jsx";
@@ -18,7 +18,7 @@ import Corporateservices from "./pages/Corporateservices.jsx";
 import TermsOfUsePage from "./pages/TermsOfUsePage.jsx";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage.jsx";
 import Colinwhiteheadpage from "./pages/ColinWhiteheadPage.jsx";
-import WorkshopPage2 from "./pages/WorkshopPage2.jsx"; // Import the new WorkshopPage2 component
+// import WorkshopPage2 from "./pages/WorkshopPage2.jsx"; // Import the new WorkshopPage2 component
 
 // Small sub-component that handles resetting scroll position on route changes
 function ScrollToTop() {
@@ -48,7 +48,7 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/client" element={<ClientsPage />} />
           <Route path="/superheroes" element={<SuperheroesPage />} />
-          <Route path="/workshop" element={<WorkshopPage />} />
+          {/* <Route path="/workshop" element={<WorkshopPage />} /> */}
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/ultimateperformance" element={<Ultimateperformance />} />
           <Route path="/businessexpansion" element={<BusinessExpansion />} />
@@ -60,7 +60,7 @@ export default function App() {
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/colin-whitehead" element={<Colinwhiteheadpage />} />
-          <Route path="/workshop2" element={<WorkshopPage2 />} /> {/* New route for WorkshopPage2 */}
+          {/* <Route path="/workshop2" element={<WorkshopPage2 />} /> New route for WorkshopPage2 */}
         </Routes>
         <Footer />
       </div>
