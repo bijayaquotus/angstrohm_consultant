@@ -30,7 +30,6 @@ export default function ClientsHero() {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const [bgScale, setBgScale] = useState(1);
   const [bgBlur, setBgBlur] = useState(0);
-  const [itemsPerView, setItemsPerView] = useState(5);
   const sliderRef = useRef(null);
   const heroRef = useRef(null);
   const rafRef = useRef(null);
@@ -40,8 +39,26 @@ export default function ClientsHero() {
   const navArrowsRef = useRef([]);
   const dotsRef = useRef([]);
 
-  // Calculate max index based on items per view
-  const maxIndex = Math.max(0, clientLogos.length - itemsPerView);
+  const [visibleItems, setVisibleItems] = useState(5);
+  const maxIndex = clientLogos.length - visibleItems;
+
+  useEffect(() => {
+    const updateVisibleItems = () => {
+      const w = window.innerWidth;
+      if (w < 480) setVisibleItems(1);
+      else if (w < 640) setVisibleItems(2);
+      else if (w < 1024) setVisibleItems(3);
+      else setVisibleItems(5);
+    };
+    updateVisibleItems();
+    window.addEventListener('resize', updateVisibleItems);
+    return () => window.removeEventListener('resize', updateVisibleItems);
+  }, []);
+
+  // Keep currentIndex valid when visibleItems shrinks/grows on resize
+  useEffect(() => {
+    setCurrentIndex((prev) => Math.min(prev, Math.max(maxIndex, 0)));
+  }, [maxIndex]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex >= maxIndex ? 0 : prevIndex + 1));
@@ -50,35 +67,6 @@ export default function ClientsHero() {
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex <= 0 ? maxIndex : prevIndex - 1));
   };
-
-  // Handle responsive items per view - show fewer items on small screens for better zoom
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 480) {
-        setItemsPerView(1.1); // Show 1.2 items - more zoomed in
-      } else if (width < 640) {
-        setItemsPerView(1.3); // Show 1.5 items on mobile
-      } else if (width < 768) {
-        setItemsPerView(2); // Show 2 items on small tablets
-      } else if (width < 1024) {
-        setItemsPerView(2.5); // Show 2.5 items on tablets
-      } else if (width < 1280) {
-        setItemsPerView(3.5); // Show 3.5 items on small desktops
-      } else {
-        setItemsPerView(5); // Show 5 items on large desktops
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Reset current index when itemsPerView changes
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [itemsPerView]);
 
   useEffect(() => {
     setReduceMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -104,10 +92,10 @@ export default function ClientsHero() {
 
   // Autoplay — pauses on hover/focus and respects reduced-motion
   useEffect(() => {
-    if (reduceMotion || isPaused || !sliderInView || itemsPerView >= clientLogos.length) return;
+    if (reduceMotion || isPaused || !sliderInView) return;
     const id = setInterval(handleNext, AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [isPaused, sliderInView, maxIndex, reduceMotion, itemsPerView]);
+  }, [isPaused, sliderInView, maxIndex, reduceMotion]);
 
   // GSAP Animations
   useEffect(() => {
@@ -176,7 +164,7 @@ export default function ClientsHero() {
           scale: 1,
           rotationX: 0,
           duration: 0.8,
-          delay: (index % Math.ceil(itemsPerView)) * 0.08,
+          delay: (index % visibleItems) * 0.08,
           ease: "back.out(1.7)",
         });
       });
@@ -258,7 +246,7 @@ export default function ClientsHero() {
       // ========== LOGO HOVER ENHANCEMENTS ==========
       logoWrapsRef.current.forEach((wrap) => {
         const img = wrap.querySelector('img');
-        
+
         wrap.addEventListener('mouseenter', () => {
           gsap.to(wrap, {
             scale: 1.08,
@@ -267,7 +255,7 @@ export default function ClientsHero() {
             duration: 0.4,
             ease: "power2.out",
           });
-          
+
           if (img) {
             gsap.to(img, {
               filter: "opacity(1)",
@@ -285,10 +273,10 @@ export default function ClientsHero() {
             duration: 0.4,
             ease: "power2.out",
           });
-          
+
           if (img) {
             gsap.to(img, {
-              filter: "opacity(1)",
+              filter: " opacity(1)",
               duration: 0.4,
               ease: "power2.out",
             });
@@ -296,10 +284,10 @@ export default function ClientsHero() {
         });
       });
 
-    }, [heroRef, sliderRef, itemsPerView]);
+    }, [heroRef, sliderRef]);
 
     return () => ctx.revert();
-  }, [itemsPerView]);
+  }, []);
 
   // Enhanced mouse-parallax with background hover effects
   const handleHeroMouseMove = (e) => {
@@ -308,7 +296,7 @@ export default function ClientsHero() {
     const rect = heroRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    
+
     rafRef.current = requestAnimationFrame(() => {
       setParallax({ x, y });
       setBgScale(1 + (Math.abs(x) + Math.abs(y)) * 0.15);
@@ -332,7 +320,7 @@ export default function ClientsHero() {
     const py = (e.clientY - rect.top) / rect.height - 0.5;
     card.style.transform = `perspective(600px) rotateX(${py * -14}deg) rotateY(${px * 14}deg) scale(1.1)`;
   };
-  
+
   const handleTiltLeave = (e) => {
     e.currentTarget.style.transform = '';
   };
@@ -367,7 +355,7 @@ export default function ClientsHero() {
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
           }
-          
+
           .ch-logo-img { filter: opacity(0.65); }
 
           .ch-arrow {
@@ -410,78 +398,6 @@ export default function ClientsHero() {
             to { transform: scaleX(1); }
           }
         }
-
-        /* ===== RESPONSIVE ZOOM FOR SMALL SCREENS ===== */
-        /* Very small screens - maximum zoom */
-        @media (max-width: 480px) {
-          .ch-logo-wrap {
-            padding: 0.5rem !important;
-            min-height: 90px !important;
-            border-radius: 0.5rem !important;
-          }
-          .ch-logo-img {
-            max-height: 70px !important;
-            max-width: 90% !important;
-            object-fit: contain !important;
-          }
-          .ch-slider {
-            padding: 1rem 0.25rem !important;
-          }
-          .ch-arrow {
-            font-size: 1.5rem !important;
-            padding: 0.25rem !important;
-          }
-          .ch-dot {
-            height: 2px !important;
-          }
-        }
-
-        /* Small screens - good zoom */
-        @media (min-width: 481px) and (max-width: 640px) {
-          .ch-logo-wrap {
-            padding: 0.75rem !important;
-            min-height: 100px !important;
-            border-radius: 0.75rem !important;
-          }
-          .ch-logo-img {
-            max-height: 80px !important;
-            max-width: 85% !important;
-            object-fit: contain !important;
-          }
-          .ch-slider {
-            padding: 1.5rem 0.5rem !important;
-          }
-          .ch-arrow {
-            font-size: 1.75rem !important;
-            padding: 0.35rem !important;
-          }
-        }
-
-        /* Medium-small screens */
-        @media (min-width: 641px) and (max-width: 768px) {
-          .ch-logo-wrap {
-            padding: 1rem !important;
-            min-height: 110px !important;
-          }
-          .ch-logo-img {
-            max-height: 85px !important;
-            max-width: 80% !important;
-            object-fit: contain !important;
-          }
-        }
-
-        /* Small tablets */
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .ch-logo-wrap {
-            padding: 1.25rem !important;
-            min-height: 120px !important;
-          }
-          .ch-logo-img {
-            max-height: 90px !important;
-            max-width: 80% !important;
-            object-fit: contain !important;
-          }
-        }
       `}</style>
 
       {/* ========== HERO HEADER ========== */}
@@ -501,9 +417,9 @@ export default function ClientsHero() {
             transition: 'transform 0.15s ease-out, filter 0.15s ease-out',
           }}
         />
-        
+
         {/* Additional overlay that darkens on hover for depth */}
-        <div 
+        <div
           className="absolute inset-0 transition-all duration-300"
           style={{
             background: `radial-gradient(circle at ${50 + parallax.x * 20}% ${50 + parallax.y * 20}%, 
@@ -511,17 +427,17 @@ export default function ClientsHero() {
                         rgba(1,1,44,0.85) 100%)`,
           }}
         />
-        
+
         {/* Gradient overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#01012C]/40 via-[#01012C]/70 to-[#01012C]" />
 
         {/* Floating glow orbs, drifting + mouse-reactive */}
         <div
-          className="ch-orb absolute w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-[#c8264f] opacity-30 blur-3xl pointer-events-none"
+          className="ch-orb absolute w-72 h-72 rounded-full bg-[#c8264f] opacity-30 blur-3xl pointer-events-none"
           style={{ top: '10%', left: '15%', transform: `translate(${parallax.x * 30}px, ${parallax.y * 30}px)` }}
         />
         <div
-          className="ch-orb absolute w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-[#4a1130] opacity-40 blur-3xl pointer-events-none"
+          className="ch-orb absolute w-72 h-72 rounded-full bg-[#4a1130] opacity-40 blur-3xl pointer-events-none"
           style={{ bottom: '5%', right: '12%', transform: `translate(${parallax.x * -24}px, ${parallax.y * -24}px)` }}
         />
 
@@ -543,15 +459,15 @@ export default function ClientsHero() {
         </div>
 
         <div className="max-w-[1280px] mx-auto relative z-10">
-          <h1 
+          <h1
             ref={titleRef}
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight"
           >
             {words.map((word, i) => (
               <span
                 key={word}
-                className="inline-block mr-2 sm:mr-3"
-                style={{ 
+                className="inline-block mr-3"
+                style={{
                   opacity: loaded ? 1 : 0,
                   transform: loaded ? 'translateY(0)' : 'translateY(0.5em)',
                   filter: loaded ? 'blur(0)' : 'blur(6px)',
@@ -564,7 +480,7 @@ export default function ClientsHero() {
           </h1>
           <div
             ref={underlineRef}
-            className="h-[3px] w-24 sm:w-32 mx-auto mt-4 sm:mt-6 rounded-full"
+            className="h-[3px] w-32 mx-auto mt-6 rounded-full"
             style={{ background: 'linear-gradient(90deg, transparent, #c8264f, transparent)' }}
           />
         </div>
@@ -573,11 +489,9 @@ export default function ClientsHero() {
       {/* ========== EXACT SLIDER WORKING AREA ========== */}
       <div
         ref={sliderRef}
-        className={`ch-slider ${sliderInView ? 'in' : ''} max-w-[1340px] mx-auto px-2 sm:px-4 py-12 sm:py-16 md:py-20 relative flex items-center`}
+        className={`ch-slider ${sliderInView ? 'in' : ''} max-w-[1340px] mx-auto px-2 sm:px-4 py-10 sm:py-14 md:py-20 relative flex items-center`}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setIsPaused(false)}
       >
 
         {/* Left Nav Arrow */}
@@ -585,32 +499,25 @@ export default function ClientsHero() {
           ref={el => navArrowsRef.current[0] = el}
           onClick={handlePrev}
           aria-label="Previous clients"
-          className={`ch-arrow text-gray-400 text-2xl sm:text-3xl md:text-4xl p-1 sm:p-2 rounded-full z-20 ${itemsPerView >= clientLogos.length ? 'opacity-30 cursor-not-allowed' : ''}`}
-          disabled={itemsPerView >= clientLogos.length}
+          className="ch-arrow text-gray-400 text-2xl sm:text-3xl md:text-4xl p-1.5 sm:p-2 rounded-full z-20 shrink-0"
         >
           &#10216;
         </button>
 
         {/* Hidden Overflow Viewport */}
-        <div className="w-full overflow-hidden mx-1 sm:mx-2 md:mx-4" style={{ perspective: '1000px' }}>
+        <div className="w-full overflow-hidden mx-1 sm:mx-4" style={{ perspective: '1000px' }}>
           <div
             className="flex items-center transition-transform duration-500 ease-out"
             style={{
-              transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+              transform: `translateX(-${currentIndex * (100 / visibleItems)}%)`
             }}
           >
             {clientLogos.map((logo, idx) => (
               <div
                 key={idx}
                 ref={el => logoWrapsRef.current[idx] = el}
-                className="ch-logo-wrap shrink-0 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-white rounded-lg sm:rounded-xl"
-                style={{ 
-                  flex: `0 0 ${100 / itemsPerView}%`,
-                  minHeight: window.innerWidth < 480 ? '90px' : 
-                            window.innerWidth < 640 ? '100px' : 
-                            window.innerWidth < 768 ? '110px' : 
-                            window.innerWidth < 1024 ? '120px' : 'auto'
-                }}
+                className="ch-logo-wrap shrink-0 flex items-center justify-center p-3 sm:p-4 md:p-6 h-full bg-white rounded-xl"
+                style={{ flex: `0 0 ${100 / visibleItems}%` }}
                 onMouseMove={handleTiltMove}
                 onMouseLeave={handleTiltLeave}
               >
@@ -629,16 +536,15 @@ export default function ClientsHero() {
           ref={el => navArrowsRef.current[1] = el}
           onClick={handleNext}
           aria-label="Next clients"
-          className={`ch-arrow text-gray-400 text-2xl sm:text-3xl md:text-4xl p-1 sm:p-2 rounded-full z-20 ${itemsPerView >= clientLogos.length ? 'opacity-30 cursor-not-allowed' : ''}`}
-          disabled={itemsPerView >= clientLogos.length}
+          className="ch-arrow text-gray-400 text-2xl sm:text-3xl md:text-4xl p-1.5 sm:p-2 rounded-full z-20 shrink-0"
         >
           &#10217;
         </button>
       </div>
 
       {/* ========== DOT INDICATORS ========== */}
-      <div className="flex justify-center items-center gap-1.5 sm:gap-2 pb-12 sm:pb-16 flex-wrap px-4">
-        {Array.from({ length: Math.min(maxIndex + 1, clientLogos.length) }).map((_, dotIdx) => {
+      <div className="flex justify-center items-center gap-2 pb-16 flex-wrap px-4">
+        {Array.from({ length: maxIndex + 1 }).map((_, dotIdx) => {
           const isActive = currentIndex === dotIdx;
           return (
             <button
@@ -646,7 +552,7 @@ export default function ClientsHero() {
               ref={el => dotsRef.current[dotIdx] = el}
               onClick={() => setCurrentIndex(dotIdx)}
               aria-label={`Go to slide ${dotIdx + 1}`}
-              className={`ch-dot h-1.5 sm:h-2 rounded-full transition-all ${isActive ? 'w-5 sm:w-7 bg-[#c8264f]' : 'w-1.5 sm:w-2 bg-gray-200'}`}
+              className={`ch-dot h-2 rounded-full ${isActive ? 'w-7 bg-[#c8264f]' : 'w-2 bg-gray-200'}`}
             >
               {isActive && !isPaused && !reduceMotion && (
                 <span
