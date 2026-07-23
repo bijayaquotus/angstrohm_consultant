@@ -3,11 +3,12 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: ["angstrohmconsulting.com"],
-  plugins: [
-    react(),
+  plugins: [react(),
     tailwindcss(),
   ],
+  server: {
+    allowedHosts: ["angstrohmconsulting.com"],
+  },
   build: {
     chunkSizeWarningLimit: 600,
   },
