@@ -251,7 +251,7 @@ export default function IntroSplit({ eyebrow, heading, paragraphs = [], ctaText,
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-[#eef0f7] py-16 md:py-20 px-6 overflow-hidden relative">
+    <section ref={sectionRef} className="bg-[#F3EFE8] py-16 md:py-20 px-6 overflow-hidden relative">
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[#c8385a]/5 blur-3xl" />
